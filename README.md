@@ -1,12 +1,9 @@
-![Lint](https://github.com/d8ahazard/glimmr_ha/workflows/Lint/badge.svg) ![Pylint](https://github.com/d8ahazard/glimmr_ha/workflows/Pylint/badge.svg)
-
 # :bulb: glimmr_ha - V 0.1.1 (out for testing)
 
 Initial commit.
 
-## :muscle: Cha
-## Installation via HACS (Home Assistant Community Store)
-[![Hacs Installtion](http://img.youtube.com/vi/_LTA07ENpBE/0.jpg)](http://www.youtube.com/watch?v=_LTA07ENpBE "Wiz Lightbulbs and Home Assistant walkthrough - 2021 Phillips Hue Killer?")
+## Installation via HACS:
+WIP
 
 ## Install for testing
 
@@ -46,11 +43,3 @@ light:
     host: <IP of the bulb#2>
 ```
 
-If you want to use the integration as switch
-
-```
-switch:
-  - platform: glimmr_ha
-    name: <Name of the device>
-    host: <IP of the socket>
-```
