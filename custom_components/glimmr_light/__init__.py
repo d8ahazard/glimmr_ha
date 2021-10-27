@@ -3,7 +3,6 @@ import logging
 
 from glimmr import Glimmr
 from homeassistant.components.light import DOMAIN as LIGHT_DOMAIN
-from homeassistant.components.switch import DOMAIN as SWITCH_DOMAIN
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST
 from homeassistant.core import HomeAssistant
@@ -12,7 +11,7 @@ from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS = (LIGHT_DOMAIN, SWITCH_DOMAIN)
+PLATFORMS = (LIGHT_DOMAIN)
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
