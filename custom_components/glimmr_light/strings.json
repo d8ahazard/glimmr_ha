@@ -16,7 +16,7 @@
       "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
       "unknown": "[%key:common::config_flow::error::unknown%]",
       "bulb_time_out": "Can not connect to the Glimmr instance. Maybe the bulb is offline or a wrong IP/host was entered. Please turn on the device and try again!",
-      "no_wiz_light": "The device can not be connected via Glimmr integration."
+      "no_glimmr": "The device can not be connected via Glimmr integration."
     },
     "abort": {
       "single_instance_allowed": "[%key:common::config_flow::abort::single_instance_allowed%]",

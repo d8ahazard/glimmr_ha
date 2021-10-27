@@ -8,7 +8,7 @@
         "error": {
             "bulb_time_out": "Can not connect to the bulb. Maybe the bulb is offline or a wrong IP/host was entered. Please turn on the light and try again!",
             "cannot_connect": "Failed to connect",
-            "no_wiz_light": "The device can not be connected via Glimmr integration.",
+            "no_glimmr": "The device can not be connected via Glimmr integration.",
             "unknown": "Unexpected error"
         },
         "step": {

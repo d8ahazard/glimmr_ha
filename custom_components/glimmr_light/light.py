@@ -141,23 +141,38 @@ class GlimmrBulb(LightEntity):
         """Instruct the light to turn on."""
 
         if ATTR_RGB_COLOR in kwargs:
-
-            _LOGGER.debug("Setting ambient color to $" + kwargs[ATTR_RGB_COLOR])
-            await self._glimmr.ambient_color(kwargs[ATTR_RGB_COLOR])
+            rgb = kwargs[ATTR_RGB_COLOR]
+            color = '#%02x%02x%02x' % rgb
+            _LOGGER.debug("Setting ambient color to " + color)
+            await self._glimmr.ambient_color(color)
             return
 
         if ATTR_EFFECT in kwargs:
-            scene_id = self._light.get_id_from_scene_name(kwargs[ATTR_EFFECT])
-
-            if scene_id == -2:  # rhythm
-                _LOGGER.warning("Invalid scene specified: " + kwargs[ATTR_EFFECT])
+            scene_id = kwargs[ATTR_EFFECT]
+            s_id = self._light.get_id_from_scene_name(scene_id)
+            if s_id < -1:
+                mode = self._light.previous_mode
+                if s_id == -2:
+                    mode = 1
+                if s_id == -3:
+                    mode = 2
+                if s_id == -4:
+                    mode = 3
+                if s_id == -5:
+                    mode = 4
+                if s_id == -6:
+                    mode = 5
+                if s_id == -7:
+                    mode = 6
+                await self._glimmr.mode(mode)
+                return
             else:
                 _LOGGER.debug(
                     "[glimmrlight %s] Setting ambient scene: %s",
                     self._light.device_name,
-                    scene_id
+                    s_id
                 )
-                await self._glimmr.ambient_scene(scene_id)
+                await self._glimmr.ambient_scene(s_id)
 
         else:
             _LOGGER.debug("Setting mode to %s", self._glimmr.device.previous_mode)

@@ -23,7 +23,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
-    """Set up the WiZ switch platform."""
+    """Set up the Glimmr switch platform."""
     # Assign configuration variables.
     # The configuration check takes care they are present.
     ip_address = config[CONF_HOST]
@@ -33,10 +33,10 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 
 
 class GlimmrPlug(SwitchEntity):
-    """Representation of WiZ Switch."""
+    """Representation of Glimmr Switch."""
 
     def __init__(self, switch: Glimmr, name):
-        """Initialize an WiZLight."""
+        """Initialize Glimmr."""
         self._switch = switch
         self._state = None
         self._name = name
@@ -87,7 +87,7 @@ class GlimmrPlug(SwitchEntity):
         self._state = self._switch.device.device_mode
         self._available = True
         _LOGGER.debug(
-            "[wizlight %s] updated state: %s; available: %s",
+            "[Glimmr %s] updated state: %s; available: %s",
             self._switch.device.device_name,
             self._state,
             self._available,
@@ -98,7 +98,7 @@ class GlimmrPlug(SwitchEntity):
         self._state = False
         self._available = False
         _LOGGER.debug(
-            "[wizlight %s] updated state: %s; available: %s",
+            "[Glimmr %s] updated state: %s; available: %s",
             self._switch.device.device_name,
             self._state,
             self._available,
@@ -107,7 +107,7 @@ class GlimmrPlug(SwitchEntity):
     async def update_state(self):
         """Update the state."""
         try:
-            _LOGGER.debug("[wizlight %s] updating state", self._switch.device.device_name)
+            _LOGGER.debug("[Glimmr %s] updating state", self._switch.device.device_name)
             await self._switch.update()
             if self._switch.device is None:
                 await self.update_state_unavailable()
