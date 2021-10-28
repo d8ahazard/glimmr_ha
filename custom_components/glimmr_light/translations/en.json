@@ -1,0 +1,27 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Device is already configured",
+            "no_devices_found": "No devices found on the network",
+            "single_instance_allowed": "Already configured. Only a single configuration possible."
+        },
+        "error": {
+            "bulb_time_out": "Can not connect to the bulb. Maybe the bulb is offline or a wrong IP/host was entered. Please turn on the light and try again!",
+            "cannot_connect": "Failed to connect",
+            "no_glimmr": "The device can not be connected via Glimmr integration.",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "confirm": {
+                "description": "Do you want to add a new Glimmr instance?"
+            },
+            "user": {
+                "data": {
+                    "host": "Hostname or IP",
+                    "name": "Name"
+                },
+                "description": "Please enter a hostname or IP address and name to add a new device:"
+            }
+        }
+    }
+}
