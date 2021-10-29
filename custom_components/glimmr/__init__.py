@@ -1,17 +1,13 @@
 """Glimmr integration."""
-import logging
-
 from glimmr import Glimmr
 from homeassistant.components.light import DOMAIN as LIGHT_DOMAIN
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST
 from homeassistant.core import HomeAssistant
 
-from .const import DOMAIN
+from .const import DOMAIN, LOGGER
 
-_LOGGER = logging.getLogger(__name__)
-
-PLATFORMS = (LIGHT_DOMAIN)
+PLATFORMS = {LIGHT_DOMAIN}
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
@@ -23,7 +19,7 @@ async def async_setup(hass: HomeAssistant, config: dict):
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up the glimmr_light integration from a config entry."""
     ip_address = entry.data.get(CONF_HOST)
-    _LOGGER.debug("Get bulb with IP: %s", ip_address)
+    LOGGER.debug("Creating glimmr from async_setup_entry: %s", ip_address)
     bulb = Glimmr(ip_address)
     await bulb.update()
     hass.data[DOMAIN][entry.unique_id] = bulb
