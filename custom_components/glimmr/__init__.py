@@ -1,8 +1,9 @@
-"""Glimmr integration."""
+"""Support for Glimmr."""
+from __future__ import annotations
 from glimmr import Glimmr
 from homeassistant.components.light import DOMAIN as LIGHT_DOMAIN
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_HOST
+from homeassistant.const import CONF_HOST, CONF_MAC
 from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN, LOGGER
@@ -20,22 +21,39 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up the glimmr_light integration from a config entry."""
     ip_address = entry.data.get(CONF_HOST)
     LOGGER.debug("Creating glimmr from async_setup_entry: %s", ip_address)
-    bulb = Glimmr(ip_address)
-    await bulb.update()
-    hass.data[DOMAIN][entry.unique_id] = bulb
+    glimmr_dev = Glimmr(ip_address)
+    await glimmr_dev.update()
+    LOGGER.debug("Updated,using UID of " + entry.unique_id)
+    hass.data[DOMAIN][entry.unique_id] = glimmr_dev
 
-    for component in PLATFORMS:
-        hass.async_create_task(
-            hass.config_entries.async_forward_entry_setup(entry, component)
+    # For backwards compat, set unique ID
+    if entry.unique_id is None:
+        hass.config_entries.async_update_entry(
+            entry, unique_id=entry.data.get(CONF_MAC)
         )
-    return True
 
+    # Set up all platforms for this device/entry.
+    hass.config_entries.async_setup_platforms(entry, PLATFORMS)
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
-    """Unload a config entry."""
-    # unload glimmr_light bulb
-    hass.data[DOMAIN][entry.unique_id] = None
-    # Remove config entry
-    await hass.config_entries.async_forward_entry_unload(entry, "light")
+    # Reload entry when its updated.
+    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
     return True
+
+
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Unload Glimmr config entry."""
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    if unload_ok:
+        glimmr_dev: Glimmr = hass.data[DOMAIN][entry.entry_id]
+
+        # Ensure disconnected and cleanup stop sub
+        await glimmr_dev.socket.stop()
+        del hass.data[DOMAIN][entry.entry_id]
+
+    return unload_ok
+
+
+async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Reload the config entry when it changed."""
+    await hass.config_entries.async_reload(entry.entry_id)

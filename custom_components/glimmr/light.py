@@ -16,13 +16,15 @@ from homeassistant.components.light import (
     SUPPORT_EFFECT,
     LightEntity,
 )
-from homeassistant.const import CONF_HOST, CONF_NAME
+from homeassistant.const import CONF_HOST, CONF_NAME, CONF_MAC
 from homeassistant.util import slugify
 
 from .const import DOMAIN, LOGGER
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
-    {vol.Required(CONF_HOST): cv.string, vol.Required(CONF_NAME): cv.string}
+    {vol.Required(CONF_HOST): cv.string,
+     vol.Required(CONF_NAME): cv.string,
+     vol.Required(CONF_MAC): cv.string}
 )
 
 
@@ -157,7 +159,7 @@ class GlimmrLight(LightEntity):
     @property
     def unique_id(self):
         """Return light unique_id."""
-        return self._name
+        return self.glimmr.system_data.device_id
 
     @property
     def is_on(self):
@@ -212,7 +214,7 @@ class GlimmrLight(LightEntity):
     @property
     def should_poll(self) -> bool:
         """Update the state periodically."""
-        return self.glimmr.connected
+        return self.glimmr.connected is False
 
     @property
     def supported_color_modes(self) -> Set[str]:
@@ -321,21 +323,20 @@ class GlimmrLight(LightEntity):
         """Update the bulb scene."""
         mode = self.glimmr.system_data.device_mode
         effect = 0
-        if mode == 3 | mode == 0:
+        if mode == 0:
             effect = self.glimmr.system_data.ambient_scene
-        else:
-            if mode == 1:
-                effect = -2
-            if mode == 2:
-                effect = -3
-            if mode == 3:
-                effect = -4
-            if mode == 4:
-                effect = -5
-            if mode == 5:
-                effect = -6
+        if mode == 1:
+            effect = -2
+        if mode == 2:
+            effect = -3
+        if mode == 3:
+            effect = self.glimmr.system_data.ambient_scene
+        if mode == 4:
+            effect = -5
+        if mode == 5:
+            effect = -6
+        LOGGER.debug("Effect id set to: %s", effect)
         self._effect = self.glimmr.get_scene_name_from_id(effect)
-
 
     async def update_scene_list(self):
         """Update the scene list."""

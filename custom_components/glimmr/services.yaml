@@ -1,6 +1,6 @@
 effect:
   name: Set effect
-  description: Control the effect settings of GLIMMR.
+  description: Control the effect settings of Glimmr.
   target:
     entity:
       integration: glimmr
@@ -8,7 +8,7 @@ effect:
   fields:
     effect:
       name: Effect
-      description: Name or ID of the GLIMMR light effect.
+      description: Name or ID of the Glimmr scene/mode.
       example: "Rainbow"
       selector:
         text:
